@@ -1,25 +1,19 @@
-import {
-  pgTable,
-  uuid,
-  varchar,
-  timestamp,
-  boolean,
-  text,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar, timestamp } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  fullName: varchar("full_name", { length: 80 }).notNull(),
-
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  emailVerified: boolean("email_verified").default(false),
-
-  profileImageUrl: text("profile_image_url"),
-
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-});
-
-export type SelectUser = typeof usersTable.$inferSelect;
-export type InsertUser = typeof usersTable.$inferInsert;
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  
+    name: varchar("user_name").notNull(),
+  
+    email: varchar("email" ).notNull().unique(),
+  
+    password: varchar("password"),
+  
+    salt: varchar("salt"), 
+  
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  
+    deletedAt: timestamp("deleted_at"),
+  });
